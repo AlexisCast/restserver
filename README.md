@@ -10,5 +10,5 @@ npm i
 npx nodemon app
 ```
 
-## Tags: Start your Application
+## Tags:
 - v1.0.0 -m “First section”
