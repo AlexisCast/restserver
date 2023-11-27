@@ -2,7 +2,7 @@ const { Router } = require("express");
 const { check } = require("express-validator");
 
 const { validateFields } = require("../middlewares/validate-fields");
-const Role = require("../models/role");
+const { isRoleValid } = require("../helpers/db-validators");
 
 const {
 	usersGet,
@@ -31,12 +31,7 @@ router.post(
 		// 	"ADMIN_ROLE",
 		// 	"USER_ROLE",
 		// ]),
-		check("role").custom(async (role = "") => {
-			const existRole = await Role.findOne({ role });
-			if (!existRole) {
-				throw new Error(`The role ${role} is not registered in the DB`);
-			}
-		}),
+		check("role").custom(isRoleValid),
 		validateFields,
 	],
 	userPost

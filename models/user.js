@@ -31,6 +31,12 @@ const userSchema = new mongoose.Schema({
 	},
 });
 
+userSchema.methods.toJSON = function () {
+	//remove __v and password
+	const { __v, password, ...user } = this.toObject();
+	return user;
+};
+
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
