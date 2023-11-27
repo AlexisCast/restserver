@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
 	},
 	state: {
 		type: Boolean,
-		required: true,
+		default: true,
 	},
 	google: {
 		type: Boolean,
