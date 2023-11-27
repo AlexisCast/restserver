@@ -33,12 +33,24 @@ const userPost = async (req, res = response) => {
 	}
 };
 
-const usersPut = (req, res = response) => {
-	const id = req.params.id;
+const usersPut = async (req, res = response) => {
+	const { id } = req.params;
+	const { _id, password, google, email, ...rest } = req.body;
 
+	//TODO validate with DB
+	if (password) {
+		//Encrypt the password
+		const salt = bycryptjs.genSaltSync(10);
+		rest.password = bycryptjs.hashSync(password, salt);
+	}
+
+	const userUpdated = await User.findByIdAndUpdate(id, rest, { new: true });
+	// res.status(200).send({
+	// 	userUpdated,
+	// });
 	res.json({
 		msg: "put API - usersPut",
-		id,
+		userUpdated,
 	});
 };
 
