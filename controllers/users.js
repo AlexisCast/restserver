@@ -16,11 +16,17 @@ const usersGet = (req, res = response) => {
 };
 
 const userPost = async (req, res = response) => {
+
 	const { name, email, password, role } = req.body;
 	const user = new User({ name, email, password, role });
 
 	//Verify if the email exist
-
+	const existEmail = await User.findOne({ email });
+	if (existEmail) {
+		return res.status(400).json({
+			msg: "The email is already registered",
+		});
+	}
 	//Encrypt the password
 	const salt = bycryptjs.genSaltSync(10);
 	user.password = bycryptjs.hashSync(password, salt);
