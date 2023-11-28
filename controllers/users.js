@@ -8,11 +8,17 @@ const usersGet = async (req, res = response) => {
 	///api/users?limit=5&from=10
 	const query = { state: true };
 
-	const users = await User.find(query)
+	/* 	USE PROMISE.ALL TO SAVE TIME AND EXECUTE SIMULTANEOUSLY
+  const users = await User.find(query)
 		.skip(Number(from))
 		.limit(Number(limit));
 
-	const total = await User.countDocuments(query);x
+	const total = await User.countDocuments(query); */
+
+	const [total, users] = await Promise.all([
+		User.countDocuments(query),
+		User.find(query).skip(Number(from)).limit(Number(limit)),
+	]);
 
 	res.json({
 		total,
