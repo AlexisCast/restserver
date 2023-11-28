@@ -73,7 +73,8 @@ const usersPatch = (req, res = response) => {
 const usersDelete = async (req, res = response) => {
 	const { id } = req.params;
 
-	console.log(id)
+	// const uid = req.uid;
+
 	//Delete physically
 	// const user = await User.findByIdAndDelete(id);
 
@@ -81,6 +82,7 @@ const usersDelete = async (req, res = response) => {
 
 	res.json({
 		user,
+		// uid,
 	});
 };
 
