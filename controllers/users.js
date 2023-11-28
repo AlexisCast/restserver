@@ -3,15 +3,13 @@ const bycryptjs = require("bcryptjs");
 
 const User = require("../models/user");
 
-const usersGet = (req, res = response) => {
-	const { q, name = "no name", apikey } = req.query;
-	///api/users?q=hola&apikey=123
+const usersGet = async (req, res = response) => {
+	const { limit = 5, from = 0 } = req.query;
+	///api/users?limit=5&from=10
+	const users = await User.find().skip(Number(from)).limit(Number(limit));
 
 	res.json({
-		msg: "get API - usersGet",
-		q,
-		name,
-		apikey,
+		users,
 	});
 };
 
@@ -49,7 +47,6 @@ const usersPut = async (req, res = response) => {
 	// 	userUpdated,
 	// });
 	res.json({
-		msg: "put API - usersPut",
 		userUpdated,
 	});
 };
