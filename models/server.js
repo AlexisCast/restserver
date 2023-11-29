@@ -8,9 +8,9 @@ class Server {
 		this.port = process.env.PORT || 3000;
 
 		this.paths = {
-			auth: "/api/users",
+			users: "/api/users",
 			categories: "/api/categories",
-			users: "/api/auth",
+			auth: "/api/auth",
 		};
 
 		//Connect to data base
@@ -39,9 +39,9 @@ class Server {
 	}
 
 	routes() {
+		this.app.use(this.paths.users, require("../routes/users"));
 		this.app.use(this.paths.auth, require("../routes/auth"));
 		this.app.use(this.paths.categories, require("../routes/categories"));
-		this.app.use(this.paths.users, require("../routes/users"));
 	}
 
 	listen() {
