@@ -76,6 +76,9 @@ const usersDelete = async (req, res = response) => {
 	//Delete physically
 	// const user = await User.findByIdAndDelete(id);
 
+	//
+	//	const user = await User.findByIdAndUpdate(id, { state: false }, { new: true });
+
 	const user = await User.findByIdAndUpdate(id, { state: false });
 	const userAuthenticated = req.user;
 
