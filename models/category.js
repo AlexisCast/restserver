@@ -17,6 +17,13 @@ const categorySchema = new mongoose.Schema({
 	},
 });
 
+categorySchema.methods.toJSON = function () {
+	//remove __v and state
+	const { __v, state, ...data } = this.toObject();
+
+	return data;
+};
+
 const Category = mongoose.model("Category", categorySchema);
 
 module.exports = Category;
