@@ -8,18 +8,30 @@ const allowedCollections = ["users", "category", "products", "roles"];
 const searchUsers = async (phrase = "", res = response) => {
 	const isMongoID = ObjectId.isValid(phrase); //True
 
-	if (!isMongoID) {
-		res.status(400).json({
-			msg: "Mongo id not valid",
-			results: [],
-		});
-	} else {
+	// if (!isMongoID) {
+	// 	return res.status(400).json({
+	// 		msg: "Mongo id not valid",
+	// 		results: [],
+	// 	});
+	// } else {
+	if (isMongoID) {
 		const user = await User.findById(phrase);
 
-		res.json({
+		return res.json({
 			results: user ? [user] : [],
 		});
 	}
+
+	const regex = new RegExp(phrase, "i");
+
+	const users = await User.find({
+		$or: [{ name: regex }, { email: regex }],
+		$and: [{ state: true }],
+	});
+
+	res.json({
+		results: users,
+	});
 };
 
 const search = (req, res = response) => {
