@@ -9,8 +9,23 @@ loadFile = (req, res = response) => {
 	}
 
 	const { file } = req.files;
+	const nameCut = file.name.split(".");
+	const extension = nameCut[nameCut.length - 1];
 
-	const uploadPath = path.join(__dirname, "../uploads/", file.name);
+	//Validate extention
+	const validExtensions = ["png", "jpg", "jpeg", "gif"];
+	if (!validExtensions.includes(extension)) {
+		return res.status(400).json({
+			msg: `The extention ${extension} is not valid, must be ${validExtensions}`,
+		});
+	}
+
+	res.json({
+		extension,
+	});
+
+	/* 	
+  const uploadPath = path.join(__dirname, "../uploads/", file.name);
 
 	file.mv(uploadPath, (err) => {
 		if (err) {
@@ -18,7 +33,8 @@ loadFile = (req, res = response) => {
 		}
 
 		res.json({ msg: "File uploaded to " + uploadPath });
-	});
+	}); 
+  */
 };
 
 module.exports = {
