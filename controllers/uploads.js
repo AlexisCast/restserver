@@ -1,6 +1,8 @@
 const { response } = require("express");
 const { uploadFile } = require("../helpers");
 
+const { User, Product } = require("../models");
+
 const loadFile = async (req, res = response) => {
 	if (!req.files || Object.keys(req.files).length === 0 || !req.files.file) {
 		res.status(400).json({ msg: "No files to upload" });
@@ -28,10 +30,40 @@ const loadFile = async (req, res = response) => {
 
 const updateImage = async (req, res = response) => {
 	const { id, collection } = req.params;
-	res.json({
-		id,
-		collection,
-	});
+
+	let model;
+
+	switch (collection) {
+		case "users":
+			model = await User.findById(id);
+			if (!model) {
+				return res.status(400).json({
+					msg: `User ${id}, does not exist.`,
+				});
+			}
+			break;
+
+		case "products":
+			model = await Product.findById(id);
+			if (!model) {
+				return res.status(400).json({
+					msg: `Product ${id}, does not exist.`,
+				});
+			}
+			break;
+
+		default:
+			return res
+				.status(500)
+				.json({ msg: "Needs validation contact Administrator" });
+	}
+
+	const name = await uploadFile(req.files, undefined, collection);
+	model.img = name;
+
+	await model.save();
+
+	res.json(model);
 };
 
 module.exports = {
