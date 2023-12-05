@@ -3,7 +3,13 @@ const { check } = require("express-validator");
 
 const { validateFields } = require("../middlewares/validate-fields");
 
-const { loadFile, updateImage, showImage } = require("../controllers/uploads");
+const {
+	loadFile,
+	updateImage,
+	updateImageCloudinary,
+	showImage,
+	showImageCloudinary,
+} = require("../controllers/uploads");
 const { collectionsPermitted } = require("../helpers");
 const { validateFileToUpload } = require("../middlewares");
 
@@ -21,7 +27,8 @@ router.put(
 		),
 		validateFields,
 	],
-	updateImage
+	// updateImage
+	updateImageCloudinary
 );
 
 router.get(
@@ -33,7 +40,8 @@ router.get(
 		),
 		validateFields,
 	],
-	showImage
+	// showImage
+	showImageCloudinary
 );
 
 module.exports = router;
