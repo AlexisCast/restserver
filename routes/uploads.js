@@ -7,6 +7,8 @@ const {
 	loadFile,
 	updateImage,
 	updateImageCloudinary,
+	showImage,
+	showImageCloudinary,
 } = require("../controllers/uploads");
 const { collectionsPermitted } = require("../helpers");
 const { validateFileToUpload } = require("../middlewares");
@@ -27,6 +29,19 @@ router.put(
 	],
 	// updateImage
 	updateImageCloudinary
+);
+
+router.get(
+	"/:collection/:id",
+	[
+		check("id", "The id mush be from Mongo").isMongoId(),
+		check("collection").custom((c) =>
+			collectionsPermitted(c, ["users", "products"])
+		),
+		validateFields,
+	],
+	// showImage
+	showImageCloudinary
 );
 
 module.exports = router;

@@ -118,7 +118,13 @@ const updateImageCloudinary = async (req, res = response) => {
 	//Clean previous image
 	try {
 		if (model.img) {
-			//TODO
+			const nameArr = model.img.split("/");
+			const name = nameArr[nameArr.length - 1];
+			const [public_id] = name.split(".");
+
+			await cloudinary.uploader.destroy(
+				`RestServer NodeJs/${collection}/${public_id}`
+			);
 		}
 	} catch (error) {
 		console.log(error);
@@ -191,9 +197,55 @@ const showImage = async (req, res = response) => {
 	res.sendFile(pathImage);
 };
 
+const showImageCloudinary = async (req, res = response) => {
+	const { id, collection } = req.params;
+
+	let model;
+
+	switch (collection) {
+		case "users":
+			model = await User.findById(id);
+			if (!model) {
+				return res.status(400).json({
+					msg: `User ${id}, does not exist.`,
+				});
+			}
+			break;
+
+		case "products":
+			model = await Product.findById(id);
+			if (!model) {
+				return res.status(400).json({
+					msg: `Product ${id}, does not exist.`,
+				});
+			}
+			break;
+
+		default:
+			return res
+				.status(500)
+				.json({ msg: "Needs validation contact Administrator" });
+	}
+
+	try {
+		if (model.img) {
+			// return res.json({
+			// 	img: model.img,
+			// });
+			return res.redirect(model.img);
+		}
+	} catch (error) {
+		console.log(error);
+	}
+
+	const pathImage = path.join(__dirname, "../assets/no-image.jpg");
+	res.sendFile(pathImage);
+};
+
 module.exports = {
 	loadFile,
 	updateImage,
 	updateImageCloudinary,
 	showImage,
+	showImageCloudinary,
 };
