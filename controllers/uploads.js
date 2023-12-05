@@ -82,12 +82,57 @@ const updateImage = async (req, res = response) => {
 	res.json(model);
 };
 
-const showImage = (req, res = response) => {
+const showImage = async (req, res = response) => {
 	const { id, collection } = req.params;
 
+	let model;
+
+	switch (collection) {
+		case "users":
+			model = await User.findById(id);
+			if (!model) {
+				return res.status(400).json({
+					msg: `User ${id}, does not exist.`,
+				});
+			}
+			break;
+
+		case "products":
+			model = await Product.findById(id);
+			if (!model) {
+				return res.status(400).json({
+					msg: `Product ${id}, does not exist.`,
+				});
+			}
+			break;
+
+		default:
+			return res
+				.status(500)
+				.json({ msg: "Needs validation contact Administrator" });
+	}
+
+	//Clean previous image
+	try {
+		if (model.img) {
+			//Must erase image from server
+			const pathImage = path.join(
+				__dirname,
+				"../uploads",
+				collection,
+				model.img
+			);
+
+			if (fs.existsSync(pathImage)) {
+				return res.sendFile(pathImage);
+			}
+		}
+	} catch (error) {
+		console.log(error);
+	}
+
 	res.json({
-		id,
-		collection,
+		msg: "Missing place holder",
 	});
 };
 
