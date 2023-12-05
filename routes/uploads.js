@@ -3,7 +3,11 @@ const { check } = require("express-validator");
 
 const { validateFields } = require("../middlewares/validate-fields");
 
-const { loadFile, updateImage, showImage } = require("../controllers/uploads");
+const {
+	loadFile,
+	updateImage,
+	updateImageCloudinary,
+} = require("../controllers/uploads");
 const { collectionsPermitted } = require("../helpers");
 const { validateFileToUpload } = require("../middlewares");
 
@@ -21,19 +25,8 @@ router.put(
 		),
 		validateFields,
 	],
-	updateImage
-);
-
-router.get(
-	"/:collection/:id",
-	[
-		check("id", "The id mush be from Mongo").isMongoId(),
-		check("collection").custom((c) =>
-			collectionsPermitted(c, ["users", "products"])
-		),
-		validateFields,
-	],
-	showImage
+	// updateImage
+	updateImageCloudinary
 );
 
 module.exports = router;
