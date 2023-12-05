@@ -91,4 +91,23 @@ const googleSignIn = async (req, res = response) => {
 	}
 };
 
-module.exports = { login, googleSignIn };
+const forgotPassword = (req, res = response) => {
+	const email = req.body.email;
+
+	return res.send({
+		msg: "forgotPassword",
+		email,
+	});
+};
+
+const updatePassword = (req, res = response) => {
+	const { token, password } = req.body;
+
+	return res.send({
+		msg: "updatePassword",
+		token,
+		password,
+	});
+};
+
+module.exports = { login, googleSignIn, forgotPassword, updatePassword };
