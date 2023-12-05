@@ -82,7 +82,17 @@ const updateImage = async (req, res = response) => {
 	res.json(model);
 };
 
+const showImage = (req, res = response) => {
+	const { id, collection } = req.params;
+
+	res.json({
+		id,
+		collection,
+	});
+};
+
 module.exports = {
 	loadFile,
 	updateImage,
+	showImage,
 };
