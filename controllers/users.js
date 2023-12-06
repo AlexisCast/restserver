@@ -3,6 +3,8 @@ const bcryptjs = require("bcryptjs");
 
 const User = require("../models/user");
 
+const { sendWelcomeEmail } = require("../emails/account");
+
 const usersGet = async (req, res = response) => {
 	const { limit = 5, from = 0 } = req.query;
 	///api/users?limit=5&from=10
@@ -38,6 +40,10 @@ const userPost = async (req, res = response) => {
 
 	try {
 		await user.save();
+
+		//Send welcome email
+		sendWelcomeEmail(user.email, user.name);
+
 		res.status(201).send({ user });
 	} catch (e) {
 		res.status(400).send(e);
