@@ -6,7 +6,10 @@ const User = require("../models/user");
 const { generateJWT } = require("../helpers/generate-jwt");
 const { googleVerify } = require("../helpers/google-verify");
 
-const { sendResetPasswordEmail } = require("../emails/account");
+const {
+	sendResetPasswordEmail,
+	sendConfirmationResetPasswordEmail,
+} = require("../emails/account");
 
 const login = async (req, res = response) => {
 	const { email, password } = req.body;
@@ -150,6 +153,10 @@ const updatePassword = async (req, res = response) => {
 
 	try {
 		await user.save();
+
+		//Send email confirmation
+		sendConfirmationResetPasswordEmail(user.email, user.name);
+		
 		return res.status(200).send({ user });
 	} catch (e) {
 		return res.status(400).send(e);

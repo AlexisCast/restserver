@@ -73,8 +73,33 @@ const sendResetPasswordEmail = (email, name, token) => {
 	});
 };
 
+const sendConfirmationResetPasswordEmail = (email, name) => {
+	// console.log("Sending reset password email...");
+
+	const confirmationResetPasswordMailOption = {
+		from: process.env.NODEMAILER_FROM,
+		to: email,
+		subject: "Succesfull Password Updated",
+		// text:  `Goodbye, ${name}. I hope to see you back sometime soon.`,
+		html: `<h1>${name} your password has been updated</h1>`,
+	};
+
+	transporter.sendMail(
+		confirmationResetPasswordMailOption,
+		function (error, info) {
+			if (error) {
+				console.log(error);
+			} else {
+				console.log(info.response);
+				console.log("Message sent: %s", info.messageId);
+			}
+		}
+	);
+};
+
 module.exports = {
 	sendWelcomeEmail,
 	sendCancelationEmail,
 	sendResetPasswordEmail,
+	sendConfirmationResetPasswordEmail,
 };
