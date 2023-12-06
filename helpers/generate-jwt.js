@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const generateJWT = (uid = "") => {
+const generateJWT = (uid = "", time = "4h") => {
 	return new Promise((resolve, reject) => {
 		const payload = { uid };
 
@@ -8,7 +8,7 @@ const generateJWT = (uid = "") => {
 			payload,
 			process.env.SECRETEORPRIVATEKEY,
 			{
-				expiresIn: "4h",
+				expiresIn: time,
 			},
 			(err, token) => {
 				if (err) {

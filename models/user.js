@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema(
 
 userSchema.methods.toJSON = function () {
 	//remove __v and password
-	const { __v, password, _id, ...user } = this.toObject();
+	const { __v, password, resetLink, _id, ...user } = this.toObject();
 	user.uid = _id;
 
 	return user;

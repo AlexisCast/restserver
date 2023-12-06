@@ -10,6 +10,8 @@ const {
 	updatePassword,
 } = require("../controllers/auth");
 
+const { validateJWT } = require("../middlewares");
+
 const router = Router();
 
 router.post(
@@ -28,8 +30,12 @@ router.post(
 	googleSignIn
 );
 
-router.put("/forgot-password", forgotPassword);
+router.put(
+	"/forgot-password",
+	[check("email", "The email is required").isEmail(), validateFields],
+	forgotPassword
+);
 
-router.put("/reset-password", updatePassword);
+router.put("/reset-password", [validateJWT, validateFields], updatePassword);
 
 module.exports = router;
