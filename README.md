@@ -16,6 +16,7 @@ npx nodemon app
 - v3.0.0 -m “Third section” -> Branch feat/10_optimize_imports
 - v5.0.0 -m “v5.0.0” -> feat/14_Search -> Branch 5.0.0-rc-5 
 - 6.0.0 -m “v6.0.0” -> feat/20_Cloudinary -> Branch 6.0.0-rc-6 
+- 7.0.0 -m “v7.0.0” -> feat/22_Send_Emaily -> Branch 7.0.0-rc-7
 
 
 ## Env File:
@@ -31,6 +32,8 @@ npx nodemon app
 - NODEMAILER_AUTH_USER= google email
 - NODEMAILER_AUTH_PASS= Google Account -> Security -> App password
 - NODEMAILER_FROM= google email
+
+- CLIENT_URL=http//...
 
 https://miracleio.me/snippets/use-gmail-with-nodemailer/
 
