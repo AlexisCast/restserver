@@ -91,4 +91,70 @@ const googleSignIn = async (req, res = response) => {
 	}
 };
 
-module.exports = { login, googleSignIn };
+const forgotPassword = async (req, res = response) => {
+	if (process.env.NODEMAILER_AUTH_USER && process.env.NODEMAILER_AUTH_PASS) {
+		const email = req.body.email;
+
+		const user = await User.findOne({ email });
+
+		if (!user) {
+			return res.status(400).json({
+				msg: "User with this email does not exist",
+			});
+		}
+
+		//if the user is ACTIVE
+		if (!user.state) {
+			return res.status(400).send({
+				msg: "User / Password are not correct - state:false",
+			});
+		}
+
+		const tokenExpiresIn = "15m";
+		const token = await generateJWT(user.id, tokenExpiresIn);
+
+		const userUpdated = await User.findByIdAndUpdate(
+			user.id,
+			{ resetLink: token },
+			{ new: true }
+		);
+
+		return res.send({
+			email,
+			token,
+			// userUpdated,
+		});
+	} else {
+		return res.status(400).json({
+			error: "You have not set up an account to send an email or a reset password key for jwt",
+		});
+	}
+};
+
+const updatePassword = async (req, res = response) => {
+	const token = req.header("x-token");
+	const { password } = req.body;
+
+	const { user } = req;
+
+	//Encrypt the passwrod
+	const salt = bcryptjs.genSaltSync(10);
+	user.password = bcryptjs.hashSync(password, salt);
+
+	//Save in DB
+
+	try {
+		await user.save();
+		return res.status(200).send({ user });
+	} catch (e) {
+		return res.status(400).send(e);
+	}
+
+	return res.send({
+		msg: "updatePassword",
+		token,
+		password,
+	});
+};
+
+module.exports = { login, googleSignIn, forgotPassword, updatePassword };

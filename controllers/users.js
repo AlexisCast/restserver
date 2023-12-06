@@ -1,5 +1,5 @@
 const { response } = require("express");
-const bycryptjs = require("bcryptjs");
+const bcryptjs = require("bcryptjs");
 
 const User = require("../models/user");
 
@@ -31,8 +31,8 @@ const userPost = async (req, res = response) => {
 	const user = new User({ name, email, password, role });
 
 	//Encrypt the password
-	const salt = bycryptjs.genSaltSync(10);
-	user.password = bycryptjs.hashSync(password, salt);
+	const salt = bcryptjs.genSaltSync(10);
+	user.password = bcryptjs.hashSync(password, salt);
 
 	//Save in DB
 
@@ -51,8 +51,8 @@ const usersPut = async (req, res = response) => {
 	//TODO validate with DB
 	if (password) {
 		//Encrypt the password
-		const salt = bycryptjs.genSaltSync(10);
-		rest.password = bycryptjs.hashSync(password, salt);
+		const salt = bcryptjs.genSaltSync(10);
+		rest.password = bcryptjs.hashSync(password, salt);
 	}
 
 	const userUpdated = await User.findByIdAndUpdate(id, rest, { new: true });
