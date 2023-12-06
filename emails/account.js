@@ -52,4 +52,29 @@ const sendCancelationEmail = (email, name) => {
 	});
 };
 
-module.exports = { sendWelcomeEmail, sendCancelationEmail };
+const sendResetPasswordEmail = (email, name, token) => {
+	// console.log("Sending reset password email...");
+
+	const resetPasswordMailOption = {
+		from: process.env.NODEMAILER_FROM,
+		to: email,
+		subject: "Reset Account Password Link",
+		// text:  `Goodbye, ${name}. I hope to see you back sometime soon.`,
+		html: `<h1>${name} please click the link below to reset your password</h1><p>${process.env.CLIENT_URL}/resetpassword/${token}</p>`,
+	};
+
+	transporter.sendMail(resetPasswordMailOption, function (error, info) {
+		if (error) {
+			console.log(error);
+		} else {
+			console.log(info.response);
+			console.log("Message sent: %s", info.messageId);
+		}
+	});
+};
+
+module.exports = {
+	sendWelcomeEmail,
+	sendCancelationEmail,
+	sendResetPasswordEmail,
+};
