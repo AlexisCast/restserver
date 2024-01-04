@@ -35,11 +35,13 @@ const login = async (req, res = response) => {
 		if (!validPassword) {
 			return res.status(400).send({
 				msg: "User / Password are not correct - password",
+				errors: "User / Password are not correct - password",
 			});
 		}
 
 		//Generate JWT
-		const token = await generateJWT(user.id);
+		const tokenExpiresIn = "30min";
+		const token = await generateJWT(user.id, tokenExpiresIn);
 
 		res.json({
 			user,
@@ -49,6 +51,7 @@ const login = async (req, res = response) => {
 		console.log(error);
 		return res.status(500).json({
 			msg: "Contact the administrator",
+			errors
 		});
 	}
 };

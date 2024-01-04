@@ -37,9 +37,14 @@ router.post(
 	"/",
 	[
 		validateJWT,
+		isAdminRole,
 		check("name", "The name is required").not().isEmpty(),
 		check("category", "The category is not a Mongo ID").isMongoId(),
 		check("category").custom(existCategoryByID),
+		check("price", "Price must be a number between 0 and 9999").isFloat({
+			min: 0,
+			max: 9999,
+		}),
 		validateFields,
 	],
 	createProduct
@@ -50,6 +55,7 @@ router.put(
 	"/:id",
 	[
 		validateJWT,
+		isAdminRole,
 		// check("category", "The category is not a Mongo ID").isMongoId(),
 		check("id").custom(existProductByID),
 		validateFields,
