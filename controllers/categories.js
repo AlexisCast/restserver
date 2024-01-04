@@ -4,7 +4,7 @@ const { Category } = require("../models");
 
 //paged - total- populate
 const obtainCategories = async (req, res = response) => {
-	const { limit = 5, from = 0 } = req.query;
+	const { limit = 15, from = 0 } = req.query;
 	///api/categories?limit=5&from=10
 	const query = { state: true };
 
