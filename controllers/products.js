@@ -4,9 +4,11 @@ const { Product } = require("../models");
 
 //paged - total- populate
 const obtainProducts = async (req, res = response) => {
-	const { limit = 5, from = 0 } = req.query;
+	const { limit = 15, from = 0 } = req.query;
 	///api/categories?limit=5&from=10
+
 	const query = { state: true };
+	// const query = { state: { $in: [true, false] } };
 
 	const [total, products] = await Promise.all([
 		Product.countDocuments(query),
@@ -57,7 +59,7 @@ const createProduct = async (req, res = response) => {
 	//Create/Save in DB
 	await product.save();
 
-	res.status(201).json({ product });
+	res.status(201).json(product);
 };
 
 //update state to falsy
