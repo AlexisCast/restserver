@@ -34,6 +34,7 @@ router.post(
 	"/",
 	[
 		validateJWT,
+		isAdminRole,
 		check("name", "The name is required").not().isEmpty(),
 		validateFields,
 	],
@@ -45,6 +46,7 @@ router.put(
 	"/:id",
 	[
 		validateJWT,
+		isAdminRole,
 		check("name", "The name is required").not().isEmpty(),
 		check("id").custom(existCategoryByID),
 		validateFields,
